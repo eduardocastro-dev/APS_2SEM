@@ -46,7 +46,7 @@ def janela_menu():
 def janela_menssagem():
     sg.theme('Reddit')
     layout_mensagem = [
-        [sg.Text ('Mensagem:'), sg.Text(count_mensagem+1)],
+        [sg.Text ('Mensagem:'), sg.Text(count_mensagem)],
         [sg.Input(key="mensagem_original")],
         [sg.Text('Informe o nome do remetente :')],
         [sg.Input(key='cod_nome')],
@@ -97,7 +97,7 @@ janela1, janela2, janela3, janela4 = janela_login(), None, None, None
 cripto = ('', '', '')
 
 #dicionario mensagens
-count_mensagem = 0
+count_mensagem = 1
 dicionario_enviados = {count_mensagem: ""}
 dicionario_chave1 = {count_mensagem: 0}
 dicionario_chave2 = {count_mensagem: 0}
@@ -106,11 +106,12 @@ dicionario_chave2 = {count_mensagem: 0}
 n_dicionario_nome_senha = 1
 lista_num_usuario = 1
 n_login = 1
+nome_user = ' '
+nome_remetente = ' '
 dicionario_nome = {n_dicionario_nome_senha: 'root'}
 dicionario_senha = {n_dicionario_nome_senha: 'mestre123'}
-dicionario_enviado_vinculo = {n_login: count_mensagem}
-nome_remetente = ' '
-dicionario_recebido_vinculo = {nome_remetente: count_mensagem}
+dicionario_enviado_vinculo = {count_mensagem: nome_user}
+dicionario_recebido_vinculo = {count_mensagem: nome_remetente}
 
 while True:
     window, event, values = sg.read_all_windows()
@@ -190,21 +191,20 @@ while True:
                     if values['cod_nome'] == v:
                         rsa(values["mensagem_original"])
                         cripto = rsa(values["mensagem_original"])
-                        sg.popup('Mensagem nº:', count_mensagem + 1, 'conteudo:', cripto[0], 'enviada com sucesso!')
+                        sg.popup('Mensagem nº:', count_mensagem , 'conteudo:', cripto[0], 'enviada com sucesso!')
                         dicionario_enviados[count_mensagem] = cripto[0]
                         dicionario_chave1[count_mensagem] = cripto[1]
                         dicionario_chave2[count_mensagem] = cripto[2]
-                        dicionario_enviado_vinculo[n_login] = count_mensagem
+                        dicionario_enviado_vinculo[count_mensagem] = nome_user
                         nome_remetente = values['cod_nome']
-                        dicionario_recebido_vinculo[nome_remetente] = count_mensagem
+                        dicionario_recebido_vinculo[count_mensagem] = nome_remetente
+                        print(dicionario_recebido_vinculo.items())
                         count_mensagem += 1
                         window["mensagem_original"].update("")
                         window['cod_nome'].update("")
                         window['aviso3'].update('')
                         janela3.hide()
                         janela2.un_hide()
-                    else:
-                        window['aviso3'].update('Remetente invalido')
             else:
                 window['aviso3'].update('Informe remetente')
         else:
@@ -226,19 +226,17 @@ while True:
 
     if window == janela3 and event == 'Confirmar':
         if values['num_m'] != '':
-            n_men_ev = int(values['num_m']) - 1
+            n_men_ev = int(values['num_m'])
             for k in dicionario_enviados.keys():
                 if n_men_ev == k:
-                    for k, v in dicionario_enviado_vinculo.items():
-                        print(k, v)
-                    if n_login == k and n_men_ev == v:
-                        decifrar(dicionario_enviados[n_men_ev], dicionario_chave1[n_men_ev],
+                    for k,v in dicionario_enviado_vinculo.items():
+                        print()
+                        if nome_user == v and n_men_ev == k :
+                            decifrar(dicionario_enviados[n_men_ev], dicionario_chave1[n_men_ev],
                                      dicionario_chave2[n_men_ev])
-                        mostra = decifrar(dicionario_enviados[n_men_ev], dicionario_chave2[n_men_ev],
+                            mostra = decifrar(dicionario_enviados[n_men_ev], dicionario_chave2[n_men_ev],
                                               dicionario_chave1[n_men_ev])
-                        sg.popup('Enviados: ', mostra)
-                    else:
-                        window['aviso4'].update('Nº de mensagem invalida ')
+                            sg.popup('Enviados: ', mostra)
                 else:
                     window['aviso4'].update('Nº de mensagem invalida ')
         else:
@@ -267,19 +265,17 @@ while True:
 
     if window == janela3 and event == 'Confirmar vizualização':
         if values['num_mr'] != '':
-            n_men_ev = int(values['num_mr'])
-            for v in dicionario_recebido_vinculo.values():
-                if n_men_ev == v:
+            n_men_er = int(values['num_mr'])
+            for k in dicionario_recebido_vinculo.keys():
+                if n_men_er == k:
                     for k, v in dicionario_recebido_vinculo.items():
                         print(k, v)
-                    if nome_user == k and n_men_ev == v:
-                        decifrar(dicionario_enviados[n_men_ev], dicionario_chave1[n_men_ev],
-                                     dicionario_chave2[n_men_ev])
-                        mostra = decifrar(dicionario_enviados[n_men_ev], dicionario_chave2[n_men_ev],
-                                              dicionario_chave1[n_men_ev])
-                        sg.popup('Enviados: ', mostra)
-                    else:
-                        window['aviso5'].update('Nº de mensagem invalida ')
+                        if n_men_er == k and nome_user == v:
+                            decifrar(dicionario_enviados[n_men_er], dicionario_chave1[n_men_er],
+                                         dicionario_chave2[n_men_er])
+                            mostra = decifrar(dicionario_enviados[n_men_er], dicionario_chave2[n_men_er],
+                                                  dicionario_chave1[n_men_er])
+                            sg.popup('Enviados: ', mostra)
                 else:
                     window['aviso5'].update('Nº de mensagem invalida ')
         else:
@@ -290,7 +286,7 @@ while True:
 
 # janela_registro
 
-    if window == janela2 and event == sg.WIN_CLOSED:
+    if window == janela3 and event == sg.WIN_CLOSED:
         janela3.hide()
         janela2.un_hide()
 
@@ -308,6 +304,7 @@ while True:
                     n_dicionario_nome_senha += 1
                     dicionario_nome[n_dicionario_nome_senha] = values['USUARIO_n']
                     dicionario_senha[n_dicionario_nome_senha] = values['SENHA']
+                    print(dicionario_nome.items())
                     window['SENHA'].update('')
                     window['USUARIO_n'].update('')
                     window['conf_senha'].update('')
