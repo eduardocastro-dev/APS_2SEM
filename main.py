@@ -267,7 +267,7 @@ while True:
 
     if window == janela3 and event == 'Confirmar vizualização':
         if values['num_mr'] != '':
-            n_men_ev = int(values['num_mr']) - 1
+            n_men_ev = int(values['num_mr'])
             for v in dicionario_recebido_vinculo.values():
                 if n_men_ev == v:
                     for k, v in dicionario_recebido_vinculo.items():
