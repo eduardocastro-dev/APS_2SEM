@@ -8,13 +8,13 @@ def janela_login():
         [sg.Text('Nº de usuario')],
         [sg.Input(enable_events=True, key='num_usuario',)],
         [sg.Text('USUARIO')],
-        [sg.Input(key='USUARIO',)],
+        [sg.Input(key='USUARIO',enable_events=True)],
         [sg.Text('SENHA')],
         [sg.Input(key='SENHA', password_char='*')],
         [sg.Button('Login'),  sg.Button('Sair')],
         [sg.Text('', key='aviso')]
     ]
-    return sg.Window('login', layout=layout, finalize=True)
+    return sg.Window('LOGIN', layout=layout, finalize=True)
 
 def janela_registro():
     sg.theme('Reddit')
@@ -22,7 +22,7 @@ def janela_registro():
         [sg.Text('NOVO USUARIO')],
         [sg.Text('Codigo de usuario: '), sg.Text(lista_num_usuario+1)],
         [sg.Text('Nome de usuario')],
-        [sg.Input(key='USUARIO_n')],
+        [sg.Input(key='USUARIO_n', enable_events= True)],
         [sg.Text('SENHA (minimo 6 digitos)')],
         [sg.Input(key='SENHA', password_char='*')],
         [sg.Text('Confirmar senha')],
@@ -30,7 +30,7 @@ def janela_registro():
         [sg.Button('REGISTRAR'), sg.Button('Voltar ao menu')],
         [sg.Text('', key='aviso2')]
     ]
-    return sg.Window('registrar', layout=layout_registro, finalize=True)
+    return sg.Window('REGISTRO', layout=layout_registro, finalize=True)
 
 def janela_menu():
     sg.theme('Reddit')
@@ -41,7 +41,7 @@ def janela_menu():
         [sg.Button('Novo usuario')],
         [sg.Button('Voltar ao login')]
     ]
-    return sg.Window('menu', layout=layout_menu, finalize=True)
+    return sg.Window('MENU', layout=layout_menu, finalize=True)
 
 def janela_menssagem():
     sg.theme('Reddit')
@@ -55,12 +55,13 @@ def janela_menssagem():
         [sg.Button('Voltar')]
 
     ]
-    return sg.Window('mensagem', layout=layout_mensagem, finalize=True)
+    return sg.Window('MESAGENS', layout=layout_mensagem, finalize=True)
 
 def janela_enviados():
     sg.theme('Reddit')
     layout_enviados = [
         [sg.Text('Enviados')],
+        [sg.Button('Visualuizar enviados')],
         [sg.Text('Informe o número da mensagem:')],
         [sg.Input(key='num_m', enable_events=True)],
         [sg.Button('Confirmar')],
@@ -68,33 +69,62 @@ def janela_enviados():
         [sg.Text('', key='aviso4')]
 
     ]
-    return sg.Window('enviados', layout=layout_enviados, finalize=True)
+    return sg.Window('ENVIADOS', layout=layout_enviados, finalize=True)
 
 def janela_recebidos():
     sg.theme('Reddit')
     layout_recebidos = [
         [sg.Text('Recebidos')],
-        [sg.Button('Visualuizar nº')],
+        [sg.Button('Visualuizar recebidos')],
         [sg.Text('Informe o número da mensagem:')],
         [sg.Input(key='num_mr', enable_events=True)],
         [sg.Button('Confirmar vizualização')],
         [sg.Button('Retornar ao menu')],
         [sg.Text('', key='aviso5')]
     ]
-    return sg.Window('recebidos', layout=layout_recebidos, finalize=True)
+    return sg.Window('RECEBIDOS', layout=layout_recebidos, finalize=True)
 
 def janela_vizualiza_r():
     sg.theme('Reddit')
     layout_vizualizar = [
-        [sg.Text(dicionario_recebido_vinculo.items())],
-        [sg.Text('Digite a mensagem vinculada com seu Usuario')],
+        [sg.Text('Mensagens recebidas:')],
+        [sg.Text(lista_recebidos)],
+        [sg.Text('Digite o nº da mensagem vinculada com seu Usuario')],
         [sg.Button('OKAY')]
     ]
-    return sg.Window('vinculo', layout= layout_vizualizar, finalize=True)
+    return sg.Window('MENSAGENS RECEBIDAS', layout= layout_vizualizar, finalize=True)
+
+def janela_vizualiza_e():
+    sg.theme('Reddit')
+    layout_vizualizar_e = [
+        [sg.Text('Mensagens enviadas:')],
+        [sg.Text(lista_enviados)],
+        [sg.Text('Digite o nº da mensagem vinculada com seu Usuario')],
+        [sg.Button('Conferir')]
+    ]
+    return sg.Window('MENSAGENS ENVIADAS', layout= layout_vizualizar_e, finalize=True)
+
+def janela_aviso():
+    sg.theme('Reddit')
+    layout_aviso = [
+        [sg.Text('Ao fechar o progama todos os dados serão resetados!')],
+        [sg.Text('PROSEGUIR COM AÇÃO?')],
+        [sg.Button('SIM ( )'), sg.Button('NÃO (X)')]
+    ]
+    return sg.Window('Aviso saida', layout=layout_aviso, finalize=True)
+def remove_repetidos(lista):
+    l = []
+    for i in lista:
+        if i not in l:
+            l.append(i)
+    l.sort()
+    return l
 
 #AÇÕES // variaveis
 janela1, janela2, janela3, janela4 = janela_login(), None, None, None
 cripto = ('', '', '')
+lista_recebidos = []
+lista_enviados = []
 
 #dicionario mensagens
 count_mensagem = 1
@@ -117,14 +147,21 @@ while True:
     window, event, values = sg.read_all_windows()
 
     # janela login #
-    if window == janela1 and event == sg.WIN_CLOSED:
+    if window == janela1 and event == sg.WIN_CLOSED or event == 'Sair':
+        janela4 = janela_aviso()
+
+    if window == janela4 and event == 'SIM ( )':
         break
 
-    if window == janela1 and event == 'Sair':
-        break
+    if window == janela4 and event == 'NÃO (X)':
+        janela4.hide()
+
 
     if event == 'num_usuario' and len(values['num_usuario']) and values['num_usuario'][-1] not in ('0123456789'):
         window['num_usuario'].update(values['num_usuario'][:-1])
+
+    if event == 'USUARIO' and len(values['USUARIO']) and values['USUARIO'][-1] not in ('abcdefghijklmnopqrstuvwxyz123456789'):
+        window['USUARIO'].update(values['USUARIO'][:-1])
 
     if event == 'Login':
         if values['num_usuario'] != '':
@@ -149,7 +186,9 @@ while True:
 
     # janela menu
 
-    if window == janela2 and event == sg.WIN_CLOSED:
+    if window == janela2 and event == sg.WIN_CLOSED or event == 'Voltar ao login':
+        lista_recebidos = []
+        lista_enviados = []
         janela2.hide()
         janela1.un_hide()
 
@@ -168,11 +207,6 @@ while True:
     if window == janela2 and event == 'Novo usuario':
         janela3 = janela_registro()
         janela2.hide()
-
-    if window == janela2 and event == 'Voltar ao login':
-        janela2.hide()
-        janela1.un_hide()
-
 
     # janela mensagem
 
@@ -212,13 +246,20 @@ while True:
 
     # janela_enviados
 
-    if window == janela3 and event == sg.WIN_CLOSED:
+    if window == janela3 and event == sg.WIN_CLOSED or event == 'Voltar ao menu':
         janela3.hide()
         janela2.un_hide()
 
-    if window == janela3 and event == 'Voltar ao menu':
-        janela3.hide()
-        janela2.un_hide()
+    if window == janela3 and event == 'Visualuizar enviados':
+        for k,v in dicionario_enviado_vinculo.items():
+            if v == nome_user:
+                lista_enviados.append(k)
+                remove_repetidos(lista_enviados)
+                lista_enviados = remove_repetidos(lista_enviados)
+        janela4 = janela_vizualiza_e()
+
+    if window == janela4 and event == 'Conferir':
+        janela4.hide()
 
     if event == 'num_m' and len(values['num_m']) and values['num_m'][-1] not in ('0123456789'):
         window['num_m'].update(values['num_m'][:-1])
@@ -227,38 +268,38 @@ while True:
     if window == janela3 and event == 'Confirmar':
         if values['num_m'] != '':
             n_men_ev = int(values['num_m'])
-            for k in dicionario_enviados.keys():
+            for k in dicionario_recebido_vinculo.keys():
                 if n_men_ev == k:
                     for k,v in dicionario_enviado_vinculo.items():
                         print()
-                        if nome_user == v and n_men_ev == k :
+                        if nome_user == v and n_men_ev == k:
                             decifrar(dicionario_enviados[n_men_ev], dicionario_chave1[n_men_ev],
                                      dicionario_chave2[n_men_ev])
                             mostra = decifrar(dicionario_enviados[n_men_ev], dicionario_chave2[n_men_ev],
                                               dicionario_chave1[n_men_ev])
-                            sg.popup('Enviados: ', mostra)
-                else:
-                    window['aviso4'].update('Nº de mensagem invalida ')
+                            for k,v in dicionario_recebido_vinculo.items():
+                                if n_men_ev == k:
+                                    visualiza_remetente = v
+                                sg.popup('Mensagem: ', mostra, 'Enviada para :', visualiza_remetente)
+                                break
         else:
             window['aviso4'].update('Nº de mensagem invalida ')
 
     #janela recebidos
-    if window == janela3 and event == sg.WIN_CLOSED:
+    if window == janela3 and event == sg.WIN_CLOSED or event == 'Retornar ao menu':
         janela3.hide()
         janela2.un_hide()
 
-    if window == janela3 and event == 'Retornar ao menu':
-        janela3.hide()
-        janela2.un_hide()
-
-    if window == janela3 and event == 'Visualuizar nº':
+    if window == janela3 and event == 'Visualuizar recebidos':
+        for k,v in dicionario_recebido_vinculo.items():
+            if v == nome_user:
+                lista_recebidos.append(k)
+                remove_repetidos(lista_recebidos)
+                lista_recebidos = remove_repetidos(lista_recebidos)
         janela4 = janela_vizualiza_r()
 
     if window == janela4 and event == 'OKAY':
         janela4.hide()
-
-
-
 
     if event == 'num_mr' and len(values['num_mr']) and values['num_mr'][-1] not in ('0123456789'):
         window['num_mr'].update(values['num_mr'][:-1])
@@ -269,34 +310,32 @@ while True:
             for k in dicionario_recebido_vinculo.keys():
                 if n_men_er == k:
                     for k, v in dicionario_recebido_vinculo.items():
-                        print(k, v)
+                        print()
                         if n_men_er == k and nome_user == v:
                             decifrar(dicionario_enviados[n_men_er], dicionario_chave1[n_men_er],
                                          dicionario_chave2[n_men_er])
                             mostra = decifrar(dicionario_enviados[n_men_er], dicionario_chave2[n_men_er],
                                                   dicionario_chave1[n_men_er])
-                            sg.popup('Enviados: ', mostra)
-                else:
-                    window['aviso5'].update('Nº de mensagem invalida ')
+                            for k,v in dicionario_enviado_vinculo.items():
+                                print()
+                            if n_men_er == k:
+                                visualiza_autor = v
+                                sg.popup('Mensagem:', mostra, 'Recebida de:', visualiza_autor)
         else:
             window['aviso5'].update('Nº de mensagem invalida ')
 
-
-
-
 # janela_registro
 
-    if window == janela3 and event == sg.WIN_CLOSED:
+    if window == janela3 and event == sg.WIN_CLOSED or event == 'Voltar ao menu':
         janela3.hide()
         janela2.un_hide()
 
-    if window == janela3 and event == 'Voltar ao menu':
-        janela3.hide()
-        janela2.un_hide()
+    if event == 'USUARIO_n' and len(values['USUARIO_n']) and values['USUARIO_n'][-1] not in ('abcdefghijklmnopqrstuvwxyz123456789'):
+        window['USUARIO_n'].update(values['USUARIO_n'][:-1])
 
     if window == janela3 and event == 'REGISTRAR':
         for v in dicionario_nome.values():
-            print(v)
+            print()
         if values['USUARIO_n'] != v:
             if values['SENHA'] == values['conf_senha']:
                 if len(values['SENHA']) > 5:
@@ -304,7 +343,7 @@ while True:
                     n_dicionario_nome_senha += 1
                     dicionario_nome[n_dicionario_nome_senha] = values['USUARIO_n']
                     dicionario_senha[n_dicionario_nome_senha] = values['SENHA']
-                    print(dicionario_nome.items())
+                    sg.popup('USUARIO CRIADO COM SUCESSO!', 'Nome:', values['USUARIO_n'], 'Código:', lista_num_usuario)
                     window['SENHA'].update('')
                     window['USUARIO_n'].update('')
                     window['conf_senha'].update('')
@@ -316,6 +355,3 @@ while True:
                 sg.popup_error('Senhas não conferem')
         else:
             sg.popup_error('Nome já ultilizado')
-
-
-
