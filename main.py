@@ -5,54 +5,54 @@ import tkinter as tk
 def janela_login():
     sg.theme('Reddit')
     layout = [
-        [sg.Text('Nº de usuario')],
-        [sg.Input(enable_events=True, key='num_usuario',)],
-        [sg.Text('USUARIO')],
-        [sg.Input(key='USUARIO',enable_events=True)],
-        [sg.Text('SENHA')],
-        [sg.Input(key='SENHA', password_char='*')],
-        [sg.Button('Login'),  sg.Button('Sair')],
-        [sg.Text('', key='aviso')]
+        [sg.Text('Nº de usuario',font=40)],
+        [sg.Input(enable_events=True, key='num_usuario',size= (100,15),font=20)],
+        [sg.Text('USUARIO',font=20)],
+        [sg.Input(key='USUARIO',enable_events=True,size= (100,15),font=20)],
+        [sg.Text('SENHA',font=20)],
+        [sg.Input(key='SENHA', password_char='*',size= (100,15),font=20)],
+        [sg.Button('Login',size= (30,5),font=20),  sg.Button('Sair',size= (30,5),font=20)],
+        [sg.Text('', key='aviso',font=20)]
     ]
     return sg.Window('LOGIN', layout=layout, finalize=True)
 
 def janela_registro():
     sg.theme('Reddit')
     layout_registro = [
-        [sg.Text('NOVO USUARIO')],
-        [sg.Text('Codigo de usuario: '), sg.Text(lista_num_usuario+1)],
-        [sg.Text('Nome de usuario')],
-        [sg.Input(key='USUARIO_n', enable_events= True)],
-        [sg.Text('SENHA (minimo 6 digitos)')],
-        [sg.Input(key='SENHA', password_char='*')],
-        [sg.Text('Confirmar senha')],
-        [sg.Input(key='conf_senha', password_char='*')],
-        [sg.Button('REGISTRAR'), sg.Button('Voltar ao menu')],
-        [sg.Text('', key='aviso2')]
+        [sg.Text('NOVO USUARIO',font=40)],
+        [sg.Text('Codigo de usuario: ',font=40), sg.Text(lista_num_usuario+1,font=40)],
+        [sg.Text('Nome de usuario',font=40)],
+        [sg.Input(key='USUARIO_n', enable_events= True,size= (120,75),font=40)],
+        [sg.Text('SENHA (minimo 6 digitos)',font=40)],
+        [sg.Input(key='SENHA', password_char='*',size= (120,75),font=40)],
+        [sg.Text('Confirmar senha',font=40)],
+        [sg.Input(key='conf_senha', password_char='*',size= (120,75),font=40)],
+        [sg.Button('REGISTRAR',size= (50,5),font=40), sg.Button('Voltar ao menu',size= (50,5),font=40)],
+        [sg.Text('', key='aviso2',font=40)]
     ]
     return sg.Window('REGISTRO', layout=layout_registro, finalize=True)
 
 def janela_menu():
     sg.theme('Reddit')
     layout_menu = [
-        [sg.Button('Enviar mensagem')],
-        [sg.Button('Mensagens enviadas')],
-        [sg.Button('Mensagens recebidas')],
-        [sg.Button('Novo usuario')],
-        [sg.Button('Voltar ao login')]
+        [sg.Button('Enviar mensagem',size= (100,5),font=20)],
+        [sg.Button('Mensagens enviadas',size= (100,5),font=20)],
+        [sg.Button('Mensagens recebidas',size= (100,5),font=20)],
+        [sg.Button('Novo usuario',size= (100,5),font=20)],
+        [sg.Button('Voltar ao login',size= (100,5),font=20)]
     ]
     return sg.Window('MENU', layout=layout_menu, finalize=True)
 
 def janela_menssagem():
     sg.theme('Reddit')
     layout_mensagem = [
-        [sg.Text ('Mensagem:'), sg.Text(count_mensagem)],
-        [sg.Input(key="mensagem_original")],
-        [sg.Text('Informe o nome do remetente :')],
-        [sg.Input(key='cod_nome')],
-        [sg.Button('Enviar mensagem')],
-        [sg.Text('', key='aviso3')],
-        [sg.Button('Voltar')]
+        [sg.Text ('Mensagem:',font=20), sg.Text(count_mensagem,font=20)],
+        [sg.Input(key="mensagem_original",size= (100,5),font=20)],
+        [sg.Text('Informe o nome do Destinatario :',font=20)],
+        [sg.Input(key='cod_nome',size= (100,5),font=20)],
+        [sg.Button('Enviar mensagem',size= (100,5),font=20)],
+        [sg.Text('', key='aviso3',font=20)],
+        [sg.Button('Voltar',size= (100,5),font=20)]
 
     ]
     return sg.Window('MESAGENS', layout=layout_mensagem, finalize=True)
@@ -60,13 +60,13 @@ def janela_menssagem():
 def janela_enviados():
     sg.theme('Reddit')
     layout_enviados = [
-        [sg.Text('Enviados')],
-        [sg.Button('Visualuizar enviados')],
-        [sg.Text('Informe o número da mensagem:')],
-        [sg.Input(key='num_m', enable_events=True)],
-        [sg.Button('Confirmar')],
-        [sg.Button('Voltar ao menu')],
-        [sg.Text('', key='aviso4')]
+        [sg.Text('Enviados',font=20)],
+        [sg.Button('Visualuizar enviados',size= (100,5),font=20)],
+        [sg.Text('Informe o número da mensagem:',font=20)],
+        [sg.Input(key='num_m', enable_events=True,size= (100,5),font=20)],
+        [sg.Button('Confirmar',size= (100,5),font=20)],
+        [sg.Button('Voltar ao menu',size= (100,5),font=20)],
+        [sg.Text('', key='aviso4',font=20)]
 
     ]
     return sg.Window('ENVIADOS', layout=layout_enviados, finalize=True)
@@ -74,42 +74,42 @@ def janela_enviados():
 def janela_recebidos():
     sg.theme('Reddit')
     layout_recebidos = [
-        [sg.Text('Recebidos')],
-        [sg.Button('Visualuizar recebidos')],
-        [sg.Text('Informe o número da mensagem:')],
-        [sg.Input(key='num_mr', enable_events=True)],
-        [sg.Button('Confirmar vizualização')],
-        [sg.Button('Retornar ao menu')],
-        [sg.Text('', key='aviso5')]
+        [sg.Text('Recebidos',font=20)],
+        [sg.Button('Visualuizar recebidos',size= (100,5),font=20)],
+        [sg.Text('Informe o número da mensagem:',font=20)],
+        [sg.Input(key='num_mr', enable_events=True,size= (100,5),font=20)],
+        [sg.Button('Confirmar vizualização',size= (100,5),font=20)],
+        [sg.Button('Retornar ao menu',size= (100,5),font=20)],
+        [sg.Text('', key='aviso5',font=20)]
     ]
     return sg.Window('RECEBIDOS', layout=layout_recebidos, finalize=True)
 
 def janela_vizualiza_r():
     sg.theme('Reddit')
     layout_vizualizar = [
-        [sg.Text('Mensagens recebidas:')],
-        [sg.Text(lista_recebidos)],
-        [sg.Text('Digite o nº da mensagem vinculada com seu Usuario')],
-        [sg.Button('OKAY')]
+        [sg.Text('Mensagens recebidas:',font=20)],
+        [sg.Text(lista_recebidos,font=20)],
+        [sg.Text('Digite o nº da mensagem vinculada com seu Usuario',font=20)],
+        [sg.Button('OKAY',size= (100,5),font=20)]
     ]
     return sg.Window('MENSAGENS RECEBIDAS', layout= layout_vizualizar, finalize=True)
 
 def janela_vizualiza_e():
     sg.theme('Reddit')
     layout_vizualizar_e = [
-        [sg.Text('Mensagens enviadas:')],
-        [sg.Text(lista_enviados)],
-        [sg.Text('Digite o nº da mensagem vinculada com seu Usuario')],
-        [sg.Button('Conferir')]
+        [sg.Text('Mensagens enviadas:',font=20)],
+        [sg.Text(lista_enviados,font=20)],
+        [sg.Text('Digite o nº da mensagem vinculada com seu Usuario',font=20)],
+        [sg.Button('Conferir',size= (100,5),font=20)]
     ]
     return sg.Window('MENSAGENS ENVIADAS', layout= layout_vizualizar_e, finalize=True)
 
 def janela_aviso():
     sg.theme('Reddit')
     layout_aviso = [
-        [sg.Text('Ao fechar o progama todos os dados serão resetados!')],
-        [sg.Text('PROSEGUIR COM AÇÃO?')],
-        [sg.Button('SIM ( )'), sg.Button('NÃO (X)')]
+        [sg.Text('Ao fechar o progama todos os dados serão resetados!',font=20)],
+        [sg.Text('PROSEGUIR COM AÇÃO?',font=20)],
+        [sg.Button('SIM ( )',size= (50,5),font=20), sg.Button('NÃO (X)',size= (50,5),font=20)]
     ]
     return sg.Window('Aviso saida', layout=layout_aviso, finalize=True)
 def remove_repetidos(lista):
@@ -320,7 +320,7 @@ while True:
                                 print()
                             if n_men_er == k:
                                 visualiza_autor = v
-                                sg.popup('Mensagem:', mostra, 'Recebida de:', visualiza_autor)
+                                sg.popup('Mensagem:', mostra, 'Recebida de:', visualiza_autor,)
         else:
             window['aviso5'].update('Nº de mensagem invalida ')
 
